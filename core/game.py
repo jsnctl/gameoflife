@@ -19,12 +19,12 @@ class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.state = np.zeros(shape=(width, height))
+        self.state = np.zeros(shape=(width, height), dtype=int)
 
     def set_state(self, state_array):
         self.state = np.reshape(
             state_array,
-            newshape=(self.height, self.width)
+            newshape=(self.height, self.width),
         )
 
     def get_value(self, x, y):
