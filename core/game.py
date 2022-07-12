@@ -1,3 +1,4 @@
+from copy import copy
 from enum import Enum
 
 import numpy as np
@@ -29,6 +30,9 @@ class Board:
     def get_value(self, x, y):
         return self.state[y][x]
 
+    def set_value(self, x, y, value):
+        self.state[y][x] = value
+
     def get_neighbours(self, x, y):
         neighbours = []
         for direction in Direction:
@@ -52,5 +56,20 @@ class Board:
             return False
         return True
 
+    def tick(self):
+        new_state = copy(self.state)
+        for y, row in enumerate(self.state):
+            for x, value in enumerate(row):
+                neighbours = self.get_neighbours(x, y)
+                n_live_neighbours = sum(filter(None, neighbours))
 
+                if value == 1 and n_live_neighbours in [2, 3]:
+                    new_state[y][x] = 1
+                elif value == 0 and n_live_neighbours == 3:
+                    new_state[y][x] = 1
+                else:
+                    new_state[y][x] = 0
+
+        self.state = new_state
+        return self.state
 
