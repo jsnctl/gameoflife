@@ -56,3 +56,83 @@ def test_board_get_neighbours(board, state_array):
 
     result = board.get_neighbours(2, 4)
     assert result == [1, 0, 1, 0, None, None, None, 0]
+
+
+def test_board_tick__block():
+    # block
+    # 0 0 0 0         0 0 0 0
+    # 0 1 1 0   -->   0 1 1 0
+    # 0 1 1 0         0 1 1 0
+    # 0 0 0 0         0 0 0 0
+
+    board = game.Board(4, 4)
+    board.set_state(
+        [
+            0, 0, 0, 0,
+            0, 1, 1, 0,
+            0, 1, 1, 0,
+            0, 0, 0, 0
+        ]
+    )
+    board.tick()
+    assert np.array_equal(
+        board.state,
+        [
+            [0, 0, 0, 0],
+            [0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [0, 0, 0, 0]
+        ]
+    )
+
+
+def test_board_tick__blinker():
+    # blinker
+    # 0 1 0       0 0 0
+    # 0 1 0  -->  1 1 1
+    # 0 1 0       0 0 0
+    board = game.Board(3, 3)
+    board.set_state(
+        [
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0
+        ]
+    )
+    board.tick()
+    assert np.array_equal(
+        board.state,
+        [
+            [0, 0, 0],
+            [1, 1, 1],
+            [0, 0, 0]
+        ]
+    )
+
+
+def test_board_tick__glider():
+    # glider
+    # 0 1 0 0       0 0 0 0
+    # 0 0 1 0  -->  1 0 1 0
+    # 1 1 1 0       0 1 1 0
+    # 0 0 0 0       0 1 0 0
+
+    board = game.Board(4, 4)
+    board.set_state(
+        [
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            1, 1, 1, 0,
+            0, 0, 0, 0
+        ]
+    )
+    board.tick()
+    assert np.array_equal(
+        board.state,
+        [
+            [0, 0, 0, 0],
+            [1, 0, 1, 0],
+            [0, 1, 1, 0],
+            [0, 1, 0, 0]
+        ]
+    )
